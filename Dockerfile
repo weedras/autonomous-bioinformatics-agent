@@ -8,7 +8,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y wget curl
 
 # Install bioinformatics tools using Conda (Bioconda channel)
-RUN conda install -y -c bioconda bwa-mem2 samtools bcftools sra-tools
+RUN conda install -y -c bioconda bwa-mem2 samtools bcftools sra-tools fastqc fastp
 
 # Install python dependencies for LLM integration
 RUN pip install google-generativeai

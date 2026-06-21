@@ -28,6 +28,8 @@ To run locally, you need Python 3 installed alongside the bioinformatics toolcha
 - `bwa-mem2`
 - `samtools`
 - `bcftools`
+- `fastqc`
+- `fastp`
 
 ```bash
 python3 agent.py --sra SRR390728 --ref phix.fasta

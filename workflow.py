@@ -84,19 +84,29 @@ class GenomicWorkflow:
         r1 = f"{self.sra_id}_1.fastq"
         r2 = f"{self.sra_id}_2.fastq"
         
-        # 2. Alignment
+        # 2. Quality Control
+        qc_cmd = f"fastqc \"{r1}\" \"{r2}\""
+        if not self.execute_with_healing(qc_cmd, "FastQC"): return False
+        
+        # 3. Trimming
+        trimmed_r1 = f"trimmed_{r1}"
+        trimmed_r2 = f"trimmed_{r2}"
+        trim_cmd = f"fastp -i \"{r1}\" -I \"{r2}\" -o \"{trimmed_r1}\" -O \"{trimmed_r2}\""
+        if not self.execute_with_healing(trim_cmd, "Trimming (fastp)"): return False
+        
+        # 4. Alignment
         # Using bwa-mem2
-        aln_cmd = f"bwa-mem2 mem -t {self.context['threads']} \"{self.reference_path}\" \"{r1}\" \"{r2}\" > aln.sam"
+        aln_cmd = f"bwa-mem2 mem -t {self.context['threads']} \"{self.reference_path}\" \"{trimmed_r1}\" \"{trimmed_r2}\" > aln.sam"
         if not self.execute_with_healing(aln_cmd, "Alignment"): return False
         
-        # 3. Sorting & Indexing
+        # 5. Sorting & Indexing
         sort_cmd = f"samtools sort -@ {self.context['threads']} aln.sam -o aln.bam"
         if not self.execute_with_healing(sort_cmd, "Sorting BAM"): return False
         
         index_cmd = f"samtools index aln.bam"
         if not self.execute_with_healing(index_cmd, "Indexing BAM"): return False
         
-        # 4. Variant Calling
+        # 6. Variant Calling
         vcf_cmd = f"bcftools mpileup -Ou -f \"{self.reference_path}\" aln.bam | bcftools call -mv -Ov -o calls.vcf"
         if not self.execute_with_healing(vcf_cmd, "Variant Calling"): return False
         
