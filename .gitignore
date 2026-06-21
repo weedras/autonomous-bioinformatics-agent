@@ -1,0 +1,26 @@
+# Ignore python cache
+__pycache__/
+*.pyc
+
+# Ignore output directory from pipeline runs
+output/
+
+# Ignore genome reference indices
+*.fasta.*
+*.fa.*
+*.fai
+*.bwt*
+*.pac
+*.ann
+*.amb
+*.0123
+*.sa
+
+# Ignore testing datasets and downloaded tools
+bwa-mem2-*/
+*.tar.bz2
+*.fastq
+*.fastq.gz
+*.bam
+*.sam
+*.vcf
