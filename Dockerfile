@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y wget curl
 # Install bioinformatics tools using Conda (Bioconda channel)
 RUN conda install -y -c bioconda bwa-mem2 samtools bcftools sra-tools
 
+# Install python dependencies for LLM integration
+RUN pip install google-generativeai
+
 # Copy the agent's Python code into the container
 COPY agent.py workflow.py executor.py healer.py reporter.py uploader.py ./
 

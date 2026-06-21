@@ -14,9 +14,13 @@ def main():
     parser.add_argument("--ref", required=True, help="Path to reference FASTA file")
     parser.add_argument("--outdir", default="output", help="Output directory")
     parser.add_argument("--webhook", default="http://localhost:8000/webhook", help="Webhook URL for results")
+    parser.add_argument("--api-key", help="Gemini API Key for the LLM Healer")
     
     args = parser.parse_args()
     
+    if args.api_key:
+        os.environ["GEMINI_API_KEY"] = args.api_key
+        
     logger.info(f"Received Request: Analyze {args.sra} against {args.ref}")
     
     workflow = GenomicWorkflow(args.sra, args.ref, args.outdir)
