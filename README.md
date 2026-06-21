@@ -16,21 +16,25 @@ The easiest way to run the agent is using Docker. The Docker container comes pre
    docker build -t autonomous-bio-agent .
    ```
 
-2. **Run the Agent**:
+2. **Run the Dashboard**:
    ```bash
-   docker run -it -v $(pwd)/output:/app/output autonomous-bio-agent --sra SRR390728 --ref path/to/your/reference.fasta
+   docker run -p 8501:8501 -v $(pwd)/output:/app/output autonomous-bio-agent
    ```
-   *(Note: You must mount your reference genome into the container or provide a network link to download it).*
+   *(Note: You must map your data and references into the container or download them directly within the UI if supported).*
+
+3. **Access the UI**:
+   Open your browser and navigate to [http://localhost:8501](http://localhost:8501)
 
 ## Running Locally
 
-To run locally, you need Python 3 installed alongside the bioinformatics toolchain:
+To run the web dashboard locally, you need Python 3 installed alongside the bioinformatics toolchain:
 - `bwa-mem2`
 - `samtools`
 - `bcftools`
 - `fastqc`
 - `fastp`
+- `streamlit`
 
 ```bash
-python3 agent.py --sra SRR390728 --ref phix.fasta
+streamlit run app.py
 ```
